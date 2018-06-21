@@ -1,7 +1,8 @@
 <template>
   <div id="app">
-    <router-view v-if="nos !== null" :nos="nos"/>
-    <div v-else>yOU aRE nOT in nOS client or something terrible happened!</div>
+    <!--v-if="nos !== null" -->
+    <router-view :nos="nos"/>
+    <!--<div v-else>yOU aRE nOT in nOS client or something terrible happened!</div>-->
   </div>
 </template>
 <script>
