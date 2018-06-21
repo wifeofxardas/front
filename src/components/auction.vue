@@ -39,9 +39,6 @@ export default {
         console.error(`can not find lots ${e}`)
         this.lotIds = []
       }
-    },
-    createLot: function () {
-      return ''
     }
   },
   data: function () {

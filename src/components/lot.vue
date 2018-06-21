@@ -14,10 +14,6 @@
         <div>{{desc}}</div>
     </div>
     <div>
-        <div>price</div>
-        <div>{{price}}</div>
-    </div>
-    <div>
       <div>state</div>
       <div>{{state}}</div>
     </div>
@@ -41,7 +37,6 @@ export default {
       owner: 'owner',
       name: 'name',
       desc: 'desc',
-      price: 228,
       state: 'open'
     }
   }

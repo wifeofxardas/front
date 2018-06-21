@@ -13,37 +13,40 @@
       <label>desc</label>
       <input v-model="desc"/>
     </div>
-    <div>
-      <label>price</label>
-      <input v-model="price"/>
-    </div>
-    <div>
-      <label>state</label>
-      <input v-model="state"/>
-    </div>
+    <button @click="create">create</button>
   </div>
 </template>
 
 <script>
-// import Helper from '../utils/helper'
-
+import Helper from '../utils/helper'
 import Icon from 'vue-awesome/components/Icon'
 export default {
   components: {
     Icon
   },
   name: 'CreateLot',
-  props: ['nos', 'ids'],
+  props: ['nos', 'contractHash'],
   created () {
   },
   methods: {
+    create: async function () {
+      const address = await this.nos.getAddress()
+
+      await this.nos.invoke({
+        scriptHash: this.contractHash,
+        operation: 'openLot',
+        args: [
+          Helper.encodeAddress(address),
+          this.name,
+          this.desc
+        ]
+      })
+    }
   },
   data: function () {
     return {
       name: 'name',
-      desc: 'desc',
-      price: 'price',
-      state: 'state'
+      desc: 'desc'
     }
   }
 }
