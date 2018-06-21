@@ -1,6 +1,6 @@
 <template>
   <div>
-    <lot v-for="id in ids" :key="id" :id="id"></lot>
+    <lot v-for="id in ids" :key="id" :id="id" :nos="nos" :contractHash="contractHash"></lot>
   </div>
 </template>
 
@@ -13,7 +13,7 @@ export default {
     Lot
   },
   name: 'LotList',
-  props: ['nos', 'ids'],
+  props: ['nos', 'ids', 'contractHash'],
   created () {
   },
   methods: {

@@ -33,15 +33,17 @@ export default {
       const address = await this.nos.getAddress()
 
       try {
-        await this.nos.invoke({
+        const tx = await this.nos.invoke({
           scriptHash: this.contractHash,
           operation: 'openLot',
           args: [
-            Helper.encodeAddress(address),
+            Helper.encode(address),
             this.name,
             this.desc
           ]
         })
+
+        console.log(`tx = ${tx}`)
       } catch (e) {
         console.log(e)
       }

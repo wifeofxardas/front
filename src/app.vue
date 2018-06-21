@@ -16,7 +16,7 @@ export default {
     data: function () {
       return {
         nos: nos,
-        contractHash: 'f70f1f4efb58caec3c9fe37f5fd53fce949ac4c1'
+        contractHash: '6484d34049d74a9972e0fa54cadb9c0abc7d3844'
       }
     }
   }

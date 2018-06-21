@@ -17,27 +17,40 @@
       <div>state</div>
       <div>{{state}}</div>
     </div>
+    <div>
+      <label>Stake</label>
+      <input v-model="stake"/>
+      <button @click="placeStake">confirm</button>
+    </div>
   </div>
 </template>
 
 <script>
-// import Helper from '../utils/helper'
+import Helper from '../utils/helper'
 
 export default {
   components: {
   },
   name: 'Lot',
-  props: ['id'],
-  created () {
+  props: ['id', 'nos', 'contractHash'],
+  async created () {
+    this.owner = await this.nos.getStorage({scriptHash: this.contractHash, key: 'lots.1.owner'})
+    console.log(this.owner)
+    console.log(Helper.unhex(Helper.decode('AK2nJJpJr6o664CWJKi1QRXjqeic2zRp8y')))
+    console.log(this.owner.toString())
   },
   methods: {
+    placeStake: function () {
+
+    }
   },
   data: function () {
     return {
       owner: 'owner',
       name: 'name',
       desc: 'desc',
-      state: 'open'
+      state: 'open',
+      stake: 0
     }
   }
 }
