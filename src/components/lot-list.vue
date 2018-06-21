@@ -12,28 +12,15 @@
 import Helper from '../utils/helper'
 export default {
   components: {
-    LotList
   },
-  name: 'Auction',
-  props: ['nos', 'contractHash'],
+  name: 'LotList',
+  props: ['nos', 'ids'],
   created () {
   },
   methods: {
-    findLots: async function () {
-      try {
-        this.lotIds = (await this.nos.getStorage({
-          scriptHash: this.contractHash, key: `${Helper.encodeAddress(this.traderAddress)}.lots`
-        })).split(';')
-      } catch (e) {
-        console.error(`can not find lots ${e}`)
-        this.lotIds = []
-      }
-    }
   },
   data: function () {
     return {
-      traderAddress: 'AK2nJJpJr6o664CWJKi1QRXjqeic2zRp8y',
-      lotIds: []
     }
   }
 }
