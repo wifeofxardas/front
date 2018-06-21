@@ -1,8 +1,10 @@
 <template>
   <div>
     <input placeholder="Trader address" v-model="traderAddress"/>
-    <icon name="retweet" scale="1"></icon>
-    <button @click="findLots">find lots</button>
+    <label for="findLotsButton">
+      <icon name="retweet" scale="1"></icon>
+    </label>
+    <button style="visibility: hidden;" id="findLotsButton" @click="findLots"></button>
     <router-link
       to="/create"
     >
