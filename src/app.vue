@@ -6,7 +6,9 @@
   </div>
 </template>
 <script>
-  import 'vue-awesome/icons/edit'
+  import 'vue-awesome/icons/retweet'
+  import 'vue-awesome/icons/plus'
+  import 'vue-awesome/icons/backward'
   const nos = window.NOS ? window.NOS.V1 : null
 
 export default {

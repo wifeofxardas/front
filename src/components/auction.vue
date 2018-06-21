@@ -1,8 +1,13 @@
 <template>
   <div>
     <input placeholder="Trader address" v-model="traderAddress"/>
+    <icon name="retweet" scale="1"></icon>
     <button @click="findLots">find lots</button>
-    <button @click="createLot">create lot</button>
+    <router-link
+      to="/create"
+    >
+      <icon name="plus" sacle="1"></icon>
+    </router-link>
     <lot-list v-if="lotIds.length" :ids="lotIds"></lot-list>
     <div v-else>no lots here</div>
   </div>
@@ -11,9 +16,11 @@
 <script>
 import Helper from '../utils/helper'
 import LotList from './lot-list'
+import Icon from 'vue-awesome/components/Icon'
 
 export default {
   components: {
+    Icon,
     LotList
   },
   name: 'Auction',

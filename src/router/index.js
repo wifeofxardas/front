@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Auction from '@/components/auction'
+import CreateLot from '@/components/create-lot'
 
 Vue.use(Router)
 
@@ -10,12 +11,11 @@ export default new Router({
       path: '/',
       name: 'Auction',
       component: Auction
+    },
+    {
+      path: '/create',
+      name: 'CreateLot',
+      component: CreateLot
     }
-    // {
-    //   path: '/aa/:aa',
-    //   name: 'ss',
-    //   component: sss,
-    //   props: true
-    // }
   ]
 })
