@@ -32,15 +32,19 @@ export default {
     create: async function () {
       const address = await this.nos.getAddress()
 
-      await this.nos.invoke({
-        scriptHash: this.contractHash,
-        operation: 'openLot',
-        args: [
-          Helper.encodeAddress(address),
-          this.name,
-          this.desc
-        ]
-      })
+      try {
+        await this.nos.invoke({
+          scriptHash: this.contractHash,
+          operation: 'openLot',
+          args: [
+            Helper.encodeAddress(address),
+            this.name,
+            this.desc
+          ]
+        })
+      } catch (e) {
+        console.log(e)
+      }
     }
   },
   data: function () {
