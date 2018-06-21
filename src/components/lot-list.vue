@@ -1,17 +1,16 @@
 <template>
   <div>
-    <input placeholder="Trader address" v-model="traderAddress"/>
-    <button @click="findLots">find lots</button>
-    <button @click="findLots">find lots</button>
-    <lot-list v-if="lotIds.length" :ids="lotIds"></lot-list>
-    <div v-else>no lots here</div>
+    <lot v-for="id in ids" :key="id" :id="id"></lot>
   </div>
 </template>
 
 <script>
-import Helper from '../utils/helper'
+// import Helper from '../utils/helper'
+
+import Lot from './lot'
 export default {
   components: {
+    Lot
   },
   name: 'LotList',
   props: ['nos', 'ids'],

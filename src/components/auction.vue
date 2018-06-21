@@ -2,7 +2,7 @@
   <div>
     <input placeholder="Trader address" v-model="traderAddress"/>
     <button @click="findLots">find lots</button>
-    <button @click="findLots">find lots</button>
+    <button @click="createLot">create lot</button>
     <lot-list v-if="lotIds.length" :ids="lotIds"></lot-list>
     <div v-else>no lots here</div>
   </div>
@@ -10,6 +10,8 @@
 
 <script>
 import Helper from '../utils/helper'
+import LotList from './lot-list'
+
 export default {
   components: {
     LotList
@@ -23,11 +25,14 @@ export default {
       try {
         this.lotIds = (await this.nos.getStorage({
           scriptHash: this.contractHash, key: `${Helper.encodeAddress(this.traderAddress)}.lots`
-        })).split(';')
+        })).split(';').filter(id => !isNaN(parseInt(id)))
       } catch (e) {
         console.error(`can not find lots ${e}`)
         this.lotIds = []
       }
+    },
+    createLot: function () {
+      return ''
     }
   },
   data: function () {
