@@ -1,10 +1,6 @@
 <template>
   <div class="lot">
     <div>lot #{{id}}</div>
-    <!--<div>-->
-      <!--<div>owner</div>-->
-      <!--<div>{{owner}}</div>-->
-    <!--</div>-->
     <div>
         <div>name</div>
         <div>{{name}}</div>
@@ -19,13 +15,14 @@
     </div>
     <div>
       <label>Stake</label>
-      <input v-model="stake"/>
-      <button @click="placeStake">confirm</button>
+      <input v-model="stake" v-bind:disabled="stakeDisabled"/>
+      <button @click="placeStake" v-bind:disabled="stakeDisabled">confirm</button>
     </div>
   </div>
 </template>
 
 <script>
+import Helper from '../utils/helper'
 
 export default {
   components: {
@@ -33,23 +30,55 @@ export default {
   name: 'Lot',
   props: ['id', 'nos', 'contractHash'],
   async created () {
-    this.name = await this.nos.getStorage({scriptHash: this.contractHash, key: 'lots.1.name'})
-    this.desc = await this.nos.getStorage({scriptHash: this.contractHash, key: 'lots.1.desc'})
-    this.state = await this.nos.getStorage({scriptHash: this.contractHash, key: 'lots.1.state'})
+    // localStorage.clear()
+    this.owner = await this.nos.getStorage({scriptHash: this.contractHash, key: `lots.${this.id}.owner`})
+    this.name = await this.nos.getStorage({scriptHash: this.contractHash, key: `lots.${this.id}.name`})
+    this.desc = await this.nos.getStorage({scriptHash: this.contractHash, key: `lots.${this.id}.desc`})
+    this.state = await this.nos.getStorage({scriptHash: this.contractHash, key: `lots.${this.id}.state`})
+
+    const savedStake = localStorage.getItem(`${this.id}.stake`)
+
+    if (savedStake) {
+      const salt = localStorage.getItem(`${this.id}.salt`)
+      this.stake = savedStake
+      this.placeStake(savedStake, salt)
+    }
   },
   methods: {
-    placeStake: function () {
+    placeStake: function (stake, savedSalt) {
+      if (this.owner !== null) {
+        const salt = savedSalt || Helper.getSalt()
+        const hashedStake = Helper.sha256((typeof stake === 'string' ? stake : this.stake) + salt)
 
+        localStorage.setItem(`${this.id}.stake`, this.stake)
+        localStorage.setItem(`${this.id}.salt`, salt)
+
+        this.stakeInterval = setInterval(() => {
+          console.log(hashedStake)
+        }, 1000)
+      } else {
+        console.error('something going wrong, try to reload page and/or do it again')
+      }
+    }
+  },
+  computed: {
+    stakeDisabled: function () {
+      return this.owner === null || this.stakeInterval !== null
     }
   },
   data: function () {
     return {
-      // owner: 'owner',
+      owner: null,
       name: 'name',
       desc: 'desc',
       state: 'open',
-      stake: 0
+      stake: 0,
+      stakeInterval: null
     }
+  },
+  beforeDestroy () {
+    clearInterval(this.stakeInterval)
+    this.stakeInterval = null
   }
 }
 </script>
