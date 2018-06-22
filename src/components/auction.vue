@@ -33,7 +33,7 @@ export default {
     findLots: async function () {
       try {
         this.lotIds = (await this.nos.getStorage({
-          scriptHash: this.contractHash, key: `${Helper.encode(this.traderAddress)}.lots`
+          scriptHash: this.contractHash, key: `${Helper.decode(this.traderAddress)}.lots`
         })).split(';').filter(id => !isNaN(parseInt(id)))
       } catch (e) {
         console.error(`can not find lots ${e}`)

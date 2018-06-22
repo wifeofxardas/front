@@ -37,7 +37,7 @@ export default {
           scriptHash: this.contractHash,
           operation: 'openLot',
           args: [
-            Helper.encode(address),
+            Helper.decode(address),
             this.name,
             this.desc
           ]

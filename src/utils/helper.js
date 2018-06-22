@@ -3,7 +3,7 @@ const alphabet = '123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz'
 const base = alphabet.length
 
 export default class Helper {
-  static encode (string) {
+  static decode (string) {
     let tmp
 
     const num = [0]

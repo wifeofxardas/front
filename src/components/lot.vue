@@ -1,10 +1,10 @@
 <template>
   <div class="lot">
     <div>lot #{{id}}</div>
-    <div>
-      <div>owner</div>
-      <div>{{owner}}</div>
-    </div>
+    <!--<div>-->
+      <!--<div>owner</div>-->
+      <!--<div>{{owner}}</div>-->
+    <!--</div>-->
     <div>
         <div>name</div>
         <div>{{name}}</div>
@@ -26,7 +26,6 @@
 </template>
 
 <script>
-import Helper from '../utils/helper'
 
 export default {
   components: {
@@ -34,10 +33,9 @@ export default {
   name: 'Lot',
   props: ['id', 'nos', 'contractHash'],
   async created () {
-    this.owner = await this.nos.getStorage({scriptHash: this.contractHash, key: 'lots.1.owner'})
-    console.log(this.owner)
-    console.log(Helper.unhex(Helper.decode('AK2nJJpJr6o664CWJKi1QRXjqeic2zRp8y')))
-    console.log(this.owner.toString())
+    this.name = await this.nos.getStorage({scriptHash: this.contractHash, key: 'lots.1.name'})
+    this.desc = await this.nos.getStorage({scriptHash: this.contractHash, key: 'lots.1.desc'})
+    this.state = await this.nos.getStorage({scriptHash: this.contractHash, key: 'lots.1.state'})
   },
   methods: {
     placeStake: function () {
@@ -46,7 +44,7 @@ export default {
   },
   data: function () {
     return {
-      owner: 'owner',
+      // owner: 'owner',
       name: 'name',
       desc: 'desc',
       state: 'open',
