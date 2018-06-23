@@ -34,7 +34,7 @@ export default {
   name: 'Lot',
   props: ['id', 'nos', 'contractHash'],
   async created () {
-    // localStorage.clear()
+    localStorage.clear()
     this.owner = await this.nos.getStorage({scriptHash: this.contractHash, key: `lots.${this.id}.owner`})
     this.name = await this.nos.getStorage({scriptHash: this.contractHash, key: `lots.${this.id}.name`})
     this.desc = await this.nos.getStorage({scriptHash: this.contractHash, key: `lots.${this.id}.desc`})
@@ -157,7 +157,11 @@ export default {
   },
   computed: {
     stakeDisabled: function () {
-      return this.owner === null || this.stakeInterval !== null || this.state === 'closed' || this.state === 'canceled'
+      return this.owner === null || this.stakeInterval !== null ||
+        this.state === 'closed' || this.state === 'canceled' || this.winnerTimeout !== null
+    },
+    userIsOwner: async function () {
+      return this.owner === Helper.decode(await this.nos.getAddress())
     }
   },
   data: function () {
