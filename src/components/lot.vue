@@ -17,6 +17,10 @@
       <div>state</div>
       <div>{{state}}</div>
     </div>
+    <div v-if="owned">
+      <button v-if="state === 'open'" @click="close">close</button>
+      <button v-if="state === 'wait'" @click="setWinner">setWinner</button>
+    </div>
     <div>
       <label>Stake</label>
       <input v-model="stake" v-bind:disabled="stakeDisabled"/>
@@ -32,9 +36,9 @@ export default {
   components: {
   },
   name: 'Lot',
-  props: ['id', 'nos', 'contractHash'],
+  props: ['id', 'nos', 'contractHash', 'owned'],
   async created () {
-    localStorage.clear()
+    // localStorage.clear()
     this.owner = await this.nos.getStorage({scriptHash: this.contractHash, key: `lots.${this.id}.owner`})
     this.name = await this.nos.getStorage({scriptHash: this.contractHash, key: `lots.${this.id}.name`})
     this.desc = await this.nos.getStorage({scriptHash: this.contractHash, key: `lots.${this.id}.desc`})
@@ -84,7 +88,7 @@ export default {
           const confirmed = localStorage.getItem(`${this.id}.confirmed`)
 
           if (await this.hashConfirmedByBlockchain()) {
-            if (await this.lotClosed() && !confirmed) {
+            if (await this.stakesClosed() && !confirmed && this.state === 'wait') {
               try {
                 const tx = await this.nos.invoke({
                   scriptHash: this.contractHash,
@@ -126,10 +130,10 @@ export default {
         } else {
           this.winner = 'not you'
         }
-
         return true
       } catch (e) {
         console.log(`no winner for lot ${this.id}`)
+        this.winner = null
         return false
       }
     },
@@ -144,24 +148,50 @@ export default {
         return false
       }
     },
-    lotClosed: async function () {
+    stakesClosed: async function () {
       try {
         this.state = await this.nos.getStorage({scriptHash: this.contractHash, key: `lots.${this.id}.state`})
 
-        return this.state === 'closed'
+        return this.state === 'wait' || this.state === 'closed' || this.state === 'canceled'
       } catch (e) {
         console.error('there is no state or troubles with connection')
         return false
       }
+    },
+    close: async function () {
+      try {
+        const tx = await this.nos.invoke({
+          scriptHash: this.contractHash,
+          operation: 'closeLot',
+          args: [
+            Helper.decode(await this.nos.getAddress()),
+            this.id
+          ]
+        })
+        const currentState = ''.concat(this.state)
+
+        this.updateStateInterval = setInterval(async () => {
+          await this.stakesClosed()
+
+          if (this.state !== currentState) {
+            clearInterval(this.updateStateInterval)
+            this.updateStateInterval = null
+          }
+        }, 2500
+        )
+        console.log(`close lot tx = ${tx}`)
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    setWinner: async function () {
+
     }
   },
   computed: {
     stakeDisabled: function () {
       return this.owner === null || this.stakeInterval !== null ||
-        this.state === 'closed' || this.state === 'canceled' || this.winnerTimeout !== null
-    },
-    userIsOwner: async function () {
-      return this.owner === Helper.decode(await this.nos.getAddress())
+        this.state !== 'open' || this.winnerTimeout !== null || this.updateStateInterval !== null
     }
   },
   data: function () {
@@ -173,12 +203,15 @@ export default {
       stake: 0,
       stakeInterval: null,
       winner: null,
-      winnerTimeout: null
+      winnerTimeout: null,
+      updateStateInterval: null
     }
   },
   beforeDestroy () {
     clearInterval(this.stakeInterval)
     this.stakeInterval = null
+    clearInterval(this.updateStateInterval)
+    this.updateStateInterval = null
     clearTimeout(this.winnerTimeout)
     this.winnerTimeout = null
   }

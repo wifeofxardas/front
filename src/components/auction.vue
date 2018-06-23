@@ -17,7 +17,13 @@
       <icon name="plus" sacle="1"></icon>
     </router-link>
     <button id="myLotsButton" @click="findMyLots">my lots</button>
-    <lot-list v-if="lotIds.length" :ids="lotIds" :nos="nos" :contractHash="contractHash"></lot-list>
+    <lot-list
+      v-if="lotIds.length"
+      :ids="lotIds"
+      :nos="nos"
+      :contractHash="contractHash"
+      :owned="owned"
+    ></lot-list>
     <div v-else>no lots here</div>
   </div>
 </template>
@@ -35,6 +41,7 @@ export default {
   name: 'Auction',
   props: ['nos', 'contractHash'],
   created () {
+    this.owned = null
   },
   methods: {
     findLots: async function () {
@@ -58,6 +65,11 @@ export default {
       traderAddress: 'AK2nJJpJr6o664CWJKi1QRXjqeic2zRp8y',
       lotIds: [],
       lotsType: 'open'
+    }
+  },
+  computed: {
+    owned: async function () {
+      return this.traderAddress === await this.nos.getAddress()
     }
   }
 }
