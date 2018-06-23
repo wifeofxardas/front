@@ -40,8 +40,8 @@ export default {
   },
   name: 'Auction',
   props: ['nos', 'contractHash'],
-  created () {
-    this.owned = null
+  async created () {
+    this.userAddress = await this.nos.getAddress()
   },
   methods: {
     findLots: async function () {
@@ -56,7 +56,7 @@ export default {
       }
     },
     findMyLots: async function () {
-      this.traderAddress = await this.nos.getAddress()
+      this.traderAddress = this.userAddress
       this.findLots()
     }
   },
@@ -64,12 +64,13 @@ export default {
     return {
       traderAddress: 'AK2nJJpJr6o664CWJKi1QRXjqeic2zRp8y',
       lotIds: [],
-      lotsType: 'open'
+      lotsType: 'open',
+      userAddress: ''
     }
   },
   computed: {
-    owned: async function () {
-      return this.traderAddress === await this.nos.getAddress()
+    owned: function () {
+      return this.traderAddress === this.userAddress
     }
   }
 }

@@ -71,7 +71,7 @@ export default {
               args: [
                 Helper.decode(await this.nos.getAddress()),
                 this.id,
-                hashedStake
+                Helper.unhex(hashedStake)
               ]
             })
 
@@ -84,40 +84,50 @@ export default {
           }
         }
 
-        this.stakeInterval = setInterval(async () => {
-          const confirmed = localStorage.getItem(`${this.id}.confirmed`)
-
-          if (await this.hashConfirmedByBlockchain()) {
-            if (await this.stakesClosed() && !confirmed && this.state === 'wait') {
-              try {
-                const tx = await this.nos.invoke({
-                  scriptHash: this.contractHash,
-                  operation: 'confirmStake',
-                  args: [
-                    Helper.decode(await this.nos.getAddress()),
-                    this.id,
-                    stake,
-                    salt
-                  ]
-                })
-
-                console.log(`confirm stake tx = ${tx}`)
-                localStorage.setItem(`${this.id}.confirmed`, true)
-              } catch (e) {
-                console.log(e)
-              }
-            } else {
-              clearInterval(this.stakeInterval)
-              this.stakeInterval = null
-              this.winnerWait()
-            }
-          }
-        }, 1000)
+        this.confirmStake(stake, salt)
       } else {
         console.error('something going wrong, try to reload page and/or do it again')
       }
     },
+    confirmStake: async function (stake, salt) {
+      const confirmed = localStorage.getItem(`${this.id}.confirmed`)
+
+      if (await this.hashConfirmedByBlockchain()) {
+        if (await this.stakesClosed() && !confirmed && this.state === 'wait') {
+          try {
+            const tx = await this.nos.invoke({
+              scriptHash: this.contractHash,
+              operation: 'confirmStake',
+              args: [
+                Helper.decode(await this.nos.getAddress()),
+                this.id,
+                stake,
+                salt
+              ]
+            })
+
+            console.log(`confirm stake tx = ${tx}`)
+          } catch (e) {
+            console.log(e)
+          }
+        } else if (confirmed || (this.state !== 'wait' && this.state !== 'open')) {
+          clearTimeout(this.stakeConfirmationTimeout)
+          this.stakeConfirmationTimeout = null
+          this.winnerWait()
+        } else if (this.state === 'open') {
+          localStorage.setItem(`${this.id}.confirmed`, true)
+          this.stakeConfirmationTimeout = setTimeout(this.confirmStake.bind(this, stake, salt), 2500)
+        }
+      } else {
+        localStorage.setItem(`${this.id}.confirmed`, true)
+        this.stakeConfirmationTimeout = setTimeout(this.confirmStake.bind(this, stake, salt), 2500)
+      }
+    },
     winnerWait: async function () {
+      if (this.state === 'canceled') {
+        return
+      }
+
       if (!await this.checkWinner()) {
         this.winnerTimeout = setTimeout(this.winnerWait.bind(this), 5000)
       }
@@ -168,29 +178,49 @@ export default {
             this.id
           ]
         })
-        const currentState = ''.concat(this.state)
 
-        this.updateStateInterval = setInterval(async () => {
-          await this.stakesClosed()
+        this.updateState()
 
-          if (this.state !== currentState) {
-            clearInterval(this.updateStateInterval)
-            this.updateStateInterval = null
-          }
-        }, 2500
-        )
         console.log(`close lot tx = ${tx}`)
       } catch (e) {
         console.log(e)
       }
     },
     setWinner: async function () {
+      try {
+        const tx = await this.nos.invoke({
+          scriptHash: this.contractHash,
+          operation: 'setLotWinner',
+          args: [
+            Helper.decode(await this.nos.getAddress()),
+            this.id
+          ]
+        })
+        this.updateState()
 
+        console.log(`close lot tx = ${tx}`)
+      } catch (e) {
+        console.log(e)
+      }
+    },
+    updateState: function () {
+      const currentState = ''.concat(this.state)
+
+      clearInterval(this.updateStateInterval)
+
+      this.updateStateInterval = setInterval(async () => {
+        await this.stakesClosed()
+
+        if (this.state !== currentState) {
+          clearInterval(this.updateStateInterval)
+          this.updateStateInterval = null
+        }
+      }, 2500)
     }
   },
   computed: {
     stakeDisabled: function () {
-      return this.owner === null || this.stakeInterval !== null ||
+      return this.owner === null || this.stakeConfirmationTimeout !== null ||
         this.state !== 'open' || this.winnerTimeout !== null || this.updateStateInterval !== null
     }
   },
@@ -201,15 +231,15 @@ export default {
       desc: 'desc',
       state: 'open',
       stake: 0,
-      stakeInterval: null,
+      stakeConfirmationTimeout: null,
       winner: null,
       winnerTimeout: null,
       updateStateInterval: null
     }
   },
   beforeDestroy () {
-    clearInterval(this.stakeInterval)
-    this.stakeInterval = null
+    clearInterval(this.stakeConfirmationTimeout)
+    this.stakeConfirmationTimeout = null
     clearInterval(this.updateStateInterval)
     this.updateStateInterval = null
     clearTimeout(this.winnerTimeout)

@@ -244,4 +244,19 @@ export default class Helper {
     s = Utf8Encode(s)
     return binb2hex(coreSha256(str2binb(s), s.length * chrsz))
   }
+
+  static unhex (string) {
+    let res = ''
+
+    if (typeof string === 'string') {
+      for (let i = 0; i < string.length; i += 2) {
+        const digit = parseInt(`0x${string.slice(i, i + 2)}`)
+
+        res += String.fromCharCode(digit)
+      }
+      return res
+    }
+
+    return res
+  }
 }
