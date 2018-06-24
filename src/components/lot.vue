@@ -39,6 +39,8 @@ export default {
   props: ['id', 'nos', 'contractHash', 'owned'],
   async created () {
     // localStorage.clear()
+    // localStorage.removeItem(`${this.id}.confirmed`)
+
     this.owner = await this.nos.getStorage({scriptHash: this.contractHash, key: `lots.${this.id}.owner`})
     this.name = await this.nos.getStorage({scriptHash: this.contractHash, key: `lots.${this.id}.name`})
     this.desc = await this.nos.getStorage({scriptHash: this.contractHash, key: `lots.${this.id}.desc`})
@@ -91,7 +93,6 @@ export default {
     },
     confirmStake: async function (stake, salt) {
       const confirmed = localStorage.getItem(`${this.id}.confirmed`)
-
       if (await this.hashConfirmedByBlockchain()) {
         if (await this.stakesClosed() && !confirmed && this.state === 'wait') {
           try {
@@ -105,6 +106,7 @@ export default {
                 salt
               ]
             })
+            localStorage.setItem(`${this.id}.confirmed`, true)
 
             console.log(`confirm stake tx = ${tx}`)
           } catch (e) {
@@ -115,11 +117,9 @@ export default {
           this.stakeConfirmationTimeout = null
           this.winnerWait()
         } else if (this.state === 'open') {
-          localStorage.setItem(`${this.id}.confirmed`, true)
           this.stakeConfirmationTimeout = setTimeout(this.confirmStake.bind(this, stake, salt), 2500)
         }
       } else {
-        localStorage.setItem(`${this.id}.confirmed`, true)
         this.stakeConfirmationTimeout = setTimeout(this.confirmStake.bind(this, stake, salt), 2500)
       }
     },

@@ -42,6 +42,7 @@ export default {
   props: ['nos', 'contractHash'],
   async created () {
     this.userAddress = await this.nos.getAddress()
+    // localStorage.clear()
   },
   methods: {
     findLots: async function () {

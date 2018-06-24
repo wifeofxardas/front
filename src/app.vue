@@ -1,8 +1,7 @@
 <template>
   <div id="app">
-    <!--v-if="nos !== null" -->
-    <router-view :nos="nos" :contractHash="contractHash"/>
-    <!--<div v-else>yOU aRE nOT in nOS client or something terrible happened!</div>-->
+    <router-view v-if="nos !== null" :nos="nos" :contractHash="contractHash"/>
+    <div v-else>yOU aRE nOT in nOS client or something terrible happened!</div>
   </div>
 </template>
 <script>
@@ -16,7 +15,7 @@ export default {
     data: function () {
       return {
         nos: nos,
-        contractHash: '4734e17a0e6382ea4134672ef3288f06f3967814'
+        contractHash: 'e6fa5526029495f7569693beb4e6896ccad870e8'
       }
     }
   }
