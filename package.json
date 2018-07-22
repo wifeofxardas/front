@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "description": "second price auction frontend",
-  "author": "Evgenii Solntsev",
+  "author": "Evgenii Solntsev <thexardass@gmail.com>",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
@@ -9,6 +9,12 @@
     "build": "node build/build.js",
     "lint": "eslint --ext .js,.vue src"
   },
+  "keywords": [
+    "nOS",
+    "NEO",
+    "Blockhain"
+  ],
+  "homepage": "https://wifeofxardas.github.io/front/",
   "dependencies": {
     "@cityofzion/neon-js": "3.9.1",
     "@nosplatform/api-functions": "0.2.2",
