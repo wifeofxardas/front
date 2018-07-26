@@ -6,9 +6,9 @@
     </label>
     <div>
       <label for="open-lots">open</label>
-      <input type="radio" id="open-lots" value="open" v-model="lotsType" />
+      <input type="radio" id="open-lots" value="open" v-model="lotsType" @change="findLots"/>
       <label for="close-lots">closed</label>
-      <input type="radio" id="close-lots" value="closed" v-model="lotsType" />
+      <input type="radio" id="close-lots" value="closed" v-model="lotsType" @change="findLots"/>
     </div>
     <button style="visibility: hidden;" id="findLotsButton" @click="findLots"></button>
     <router-link
@@ -42,7 +42,7 @@ export default {
   props: ['nos', 'contractHash'],
   async created () {
     this.userAddress = await this.nos.getAddress()
-    // localStorage.clear()
+    this.traderAddress = await this.nos.getAddress()
   },
   methods: {
     findLots: async function () {
@@ -63,7 +63,7 @@ export default {
   },
   data: function () {
     return {
-      traderAddress: 'AK2nJJpJr6o664CWJKi1QRXjqeic2zRp8y',
+      traderAddress: '',
       lotIds: [],
       lotsType: 'open',
       userAddress: ''

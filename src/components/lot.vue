@@ -38,13 +38,11 @@ export default {
   name: 'Lot',
   props: ['id', 'nos', 'contractHash', 'owned'],
   async created () {
-    // localStorage.clear()
-    // localStorage.removeItem(`${this.id}.confirmed`)
-
     this.owner = await this.nos.getStorage({scriptHash: this.contractHash, key: `lots.${this.id}.owner`})
     this.name = await this.nos.getStorage({scriptHash: this.contractHash, key: `lots.${this.id}.name`})
     this.desc = await this.nos.getStorage({scriptHash: this.contractHash, key: `lots.${this.id}.desc`})
     this.state = await this.nos.getStorage({scriptHash: this.contractHash, key: `lots.${this.id}.state`})
+
     await this.checkWinner()
 
     const savedStake = localStorage.getItem(`${this.id}.stake`)
@@ -227,9 +225,9 @@ export default {
   data: function () {
     return {
       owner: null,
-      name: 'name',
-      desc: 'desc',
-      state: 'open',
+      name: null,
+      desc: null,
+      state: null,
       stake: 0,
       stakeConfirmationTimeout: null,
       winner: null,
