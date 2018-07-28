@@ -5,7 +5,7 @@
         <router-link
           :to="{
             name: 'lots',
-            params: { address: userAddress }
+            params: { address: myAddress }
           }"
         >
           My lots
@@ -34,7 +34,15 @@
 <script>
   export default {
     name: 'AppHeader',
-    props: ['userAddress']
+    props: ['nos'],
+    async created () {
+      this.myAddress = await this.nos.getAddress()
+    },
+    data: function () {
+      return {
+        myAddress: ''
+      }
+    }
   }
 </script>
 

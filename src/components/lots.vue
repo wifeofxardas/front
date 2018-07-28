@@ -11,11 +11,6 @@
       <input type="radio" id="close-lots" value="closed" v-model="lotsType" @change="findLots"/>
     </div>
     <button style="visibility: hidden;" id="findLotsButton" @click="findLots"></button>
-    <router-link
-      to="/create"
-    >
-      <icon name="plus" sacle="1"></icon>
-    </router-link>
     <button id="myLotsButton" @click="findMyLots">my lots</button>
     <lot-list
       v-if="lotIds.length"
@@ -38,11 +33,15 @@ export default {
     Icon,
     LotList
   },
-  name: 'Auction',
+  name: 'Lots',
   props: ['nos', 'contractHash'],
   async created () {
     this.userAddress = await this.nos.getAddress()
-    this.traderAddress = await this.nos.getAddress()
+    this.traderAddress = this.$route.params.address
+
+    if (this.traderAddress) {
+      this.findLots()
+    }
   },
   methods: {
     findLots: async function () {

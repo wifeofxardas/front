@@ -1,10 +1,9 @@
 <template>
   <div id="app">
-    <app-header user-address="userAddress"></app-header>
+  <app-header :nos="nos" ></app-header>
     <!--<router-view-->
       <!--v-if="nos !== null"-->
     <router-view
-      :userAddress="userAddress"
       :nos="nos"
       :contractHash="contractHash"
     />
@@ -19,19 +18,19 @@
   const nos = window.NOS ? window.NOS.V1 : null
 
 export default {
-    name: 'app',
+  name: 'app',
   components: {AppHeader},
   async created () {
-      this.userAddress = await nos.getAddress()
-    },
-    data: function () {
-      return {
-        nos: nos,
-        contractHash: 'e6fa5526029495f7569693beb4e6896ccad870e8',
-        userAddress: ''
-      }
+    this.userAddress = await nos.getAddress()
+  },
+  data: function () {
+    return {
+      nos: nos,
+      contractHash: 'e6fa5526029495f7569693beb4e6896ccad870e8',
+      userAddress: ''
     }
   }
+}
 </script>
 
 <style>

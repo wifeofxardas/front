@@ -6,8 +6,7 @@
 
 <script>
   export default {
-    name: 'AppHeader',
-    props: ['userAddress']
+    name: 'About'
   }
 </script>
 
