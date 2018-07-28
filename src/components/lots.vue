@@ -11,13 +11,15 @@
           <label for="close-lots">Closed</label>
         </div>
       </div>
-      <div>
-        <input placeholder="Trader address" v-model="traderAddress"/>
+      <div class="addressBox">
+        <input class="addressInput" placeholder="Trader address" v-model="traderAddress"/>
         <label for="findLotsButton">
-          <icon name="retweet" scale="1"></icon>
+          <img src="../assets/refresh.png">
+          <!--<icon name="retweet" scale="1"></icon>-->
+          <button style="visibility: hidden;" id="findLotsButton" @click="findLots"></button>
         </label>
       </div>
-      <button style="visibility: hidden;" id="findLotsButton" @click="findLots"></button>
+
       <lot-list
         v-if="lotIds.length"
         :ids="lotIds"
@@ -25,6 +27,7 @@
         :contractHash="contractHash"
         :owned="owned"
       ></lot-list>
+
       <div class="noLots" v-else>
         <div>
           No lots here...
@@ -106,5 +109,23 @@ export default {
     display: flex;
     justify-content: center;
     color: white;
+  }
+
+  .addressInput {
+    border-radius: 30px;
+    width: 450px;
+    height: 2.5rem;
+    border-style: unset;
+    outline: none;
+    margin: 10px;
+    padding: 20px;
+    box-sizing: border-box;
+    color: rgb(14, 51, 68);
+    font-size: 1.25rem;
+  }
+
+  .addressBox {
+    display: flex;
+    align-items: center;
   }
 </style>
