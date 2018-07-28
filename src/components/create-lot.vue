@@ -1,19 +1,19 @@
 <template>
-  <div>
-    <router-link
-      to="/"
-    >
-      <icon name="backward" sacle="1"></icon>
-    </router-link>
+  <div class="createLot">
     <div>
-      <label>name</label>
-      <input v-model="name"/>
+      <h2>Create my lot</h2>
     </div>
     <div>
-      <label>desc</label>
-      <input v-model="desc"/>
+      <label>
+        <input placeholder="Name" v-model="name"/>
+      </label>
     </div>
-    <button @click="create">create</button>
+    <div>
+      <label>
+        <textarea  placeholder="Description" v-model="desc"> </textarea>
+      </label>
+    </div>
+    <button @click="create">Create</button>
   </div>
 </template>
 
@@ -42,8 +42,6 @@ export default {
             this.desc
           ]
         })
-
-        console.log(`tx = ${tx}`)
       } catch (e) {
         console.log(e)
       }
@@ -51,8 +49,8 @@ export default {
   },
   data: function () {
     return {
-      name: 'name',
-      desc: 'desc'
+      name: '',
+      desc: ''
     }
   }
 }
@@ -60,5 +58,38 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .createLot {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+  }
+  .createLot h2 {
+    color: rgb(107, 108, 119)
+  }
 
+  .createLot input, .createLot textarea {
+    max-width: 250px;
+    width: 250px;
+    -webkit-border-radius: 30px;
+    -moz-border-radius: 30px;
+    border-radius: 15px;
+    border-style: hidden;
+    box-sizing: padding-box;
+    padding: 10px;
+    margin: 10px;
+  }
+
+  .createLot textarea {
+    height: 4rem;
+
+  }
+
+  .createLot button {
+    background-color: rgb(253, 204, 0);
+    border-radius: 10px;
+    height: 2rem;
+    width: 125px;
+    border-style: hidden;
+  }
 </style>
