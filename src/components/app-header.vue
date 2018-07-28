@@ -5,7 +5,7 @@
         <router-link
           :to="{
             name: 'lots',
-            params: { address: myAddress }
+            params: { address: myAddress, state: 'open' }
           }"
         >
           My lots

@@ -14,7 +14,7 @@ export default new Router({
       component: About
     },
     {
-      path: '/lots/:address?',
+      path: '/lots/:address?/:state?',
       name: 'lots',
       component: Lots
     },

@@ -6,12 +6,11 @@
     </label>
     <div>
       <label for="open-lots">open</label>
-      <input type="radio" id="open-lots" value="open" v-model="lotsType" @change="findLots"/>
+      <input type="radio" id="open-lots" value="open" v-model="state" @change="findLots"/>
       <label for="close-lots">closed</label>
-      <input type="radio" id="close-lots" value="closed" v-model="lotsType" @change="findLots"/>
+      <input type="radio" id="close-lots" value="closed" v-model="state" @change="findLots"/>
     </div>
     <button style="visibility: hidden;" id="findLotsButton" @click="findLots"></button>
-    <button id="myLotsButton" @click="findMyLots">my lots</button>
     <lot-list
       v-if="lotIds.length"
       :ids="lotIds"
@@ -48,23 +47,19 @@ export default {
       try {
         this.lotIds = (await this.nos.getStorage({
           scriptHash: this.contractHash,
-          key: `${Helper.decode(this.traderAddress)}.${this.lotsType === 'open' ? 'lots' : 'closedLots'}`
+          key: `${Helper.decode(this.traderAddress)}.${this.state === 'open' ? 'lots' : 'closedLots'}`
         })).split(';').filter(id => !isNaN(parseInt(id)))
       } catch (e) {
         console.error(`can not find lots ${e}`)
         this.lotIds = []
       }
-    },
-    findMyLots: async function () {
-      this.traderAddress = this.userAddress
-      this.findLots()
     }
   },
   data: function () {
     return {
       traderAddress: '',
       lotIds: [],
-      lotsType: 'open',
+      state: this.$route.params.state || 'open',
       userAddress: ''
     }
   },
