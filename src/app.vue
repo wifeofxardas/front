@@ -36,5 +36,6 @@ export default {
 <style>
   body {
     background-color: rgb(65, 66, 75);
+    font-family: 'Muli', sans-serif;
   }
 </style>
