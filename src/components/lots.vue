@@ -1,24 +1,37 @@
 <template>
-  <div>
-    <input placeholder="Trader address" v-model="traderAddress"/>
-    <label for="findLotsButton">
-      <icon name="retweet" scale="1"></icon>
-    </label>
+  <div class="lots">
     <div>
-      <label for="open-lots">open</label>
-      <input type="radio" id="open-lots" value="open" v-model="state" @change="findLots"/>
-      <label for="close-lots">closed</label>
-      <input type="radio" id="close-lots" value="closed" v-model="state" @change="findLots"/>
+      <div class="stateSelect">
+        <div>
+          <input type="radio" id="open-lots" value="open" v-model="state" @change="findLots"/>
+          <label for="open-lots">Open</label>
+        </div>
+        <div>
+          <input type="radio" id="close-lots" value="closed" v-model="state" @change="findLots"/>
+          <label for="close-lots">Closed</label>
+        </div>
+      </div>
+      <div>
+        <input placeholder="Trader address" v-model="traderAddress"/>
+        <label for="findLotsButton">
+          <icon name="retweet" scale="1"></icon>
+        </label>
+      </div>
+      <button style="visibility: hidden;" id="findLotsButton" @click="findLots"></button>
+      <lot-list
+        v-if="lotIds.length"
+        :ids="lotIds"
+        :nos="nos"
+        :contractHash="contractHash"
+        :owned="owned"
+      ></lot-list>
+      <div class="noLots" v-else>
+        <div>
+          No lots here...
+        </div>
+        <img src="../assets/face.png">
+      </div>
     </div>
-    <button style="visibility: hidden;" id="findLotsButton" @click="findLots"></button>
-    <lot-list
-      v-if="lotIds.length"
-      :ids="lotIds"
-      :nos="nos"
-      :contractHash="contractHash"
-      :owned="owned"
-    ></lot-list>
-    <div v-else>no lots here</div>
   </div>
 </template>
 
@@ -73,5 +86,25 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .lots {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
 
+  .noLots {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: rgb(107, 108, 119);
+    font-size: 2rem;
+    padding-top: 4rem;
+  }
+
+  .stateSelect {
+    display: flex;
+    justify-content: center;
+    color: white;
+  }
 </style>

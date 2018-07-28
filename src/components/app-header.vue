@@ -88,7 +88,7 @@
 
   .header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 20px;
   }
@@ -96,5 +96,13 @@
   .backNav {
     width: 2.5rem;
     height: 2.5rem;
+    position: absolute;
+    right: 20px;
+  }
+
+  .headerNav {
+    position: absolute;
+    left: 20px;
+    top: 20px
   }
 </style>
