@@ -28,6 +28,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .lotList {
-
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 1200px;
   }
 </style>

@@ -1,6 +1,6 @@
 <template>
   <div class="lots">
-    <div>
+    <!--<div>-->
       <div class="stateSelect">
         <div>
           <input type="radio" id="open-lots" value="open" v-model="state" @change="findLots"/>
@@ -33,7 +33,7 @@
         </div>
         <img src="../assets/face.png">
       </div>
-    </div>
+    <!--</div>-->
   </div>
 </template>
 
@@ -92,6 +92,8 @@ export default {
     display: flex;
     justify-content: center;
     padding: 20px;
+    flex-direction: column;
+    align-items: center;
   }
 
   .noLots {

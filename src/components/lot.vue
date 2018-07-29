@@ -264,6 +264,14 @@ export default {
     border-color: rgb(253, 204, 0);
   }
 
+  .lot.canceled {
+    border-color: red;
+  }
+
+  .lot.wait {
+    border-color: gray;
+  }
+
   .number, .stateText, .stakeText, .winnerText {
     color: rgb(253, 204, 0);
     font-weight: bold;
@@ -284,6 +292,12 @@ export default {
     width: 3.5rem;
   }
 
+  .lot.closed .stakeInput,
+  .lot.canceled .stakeInput,
+  .lot.wait .stakeInput{
+    background-color: transparent;
+    color: white;
+  }
   .stakeInput {
     border-radius: 10px;
     border-style: none;
