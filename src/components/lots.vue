@@ -15,7 +15,6 @@
         <input class="addressInput" placeholder="Trader address" v-model="traderAddress"/>
         <label for="findLotsButton">
           <img src="../assets/refresh.png">
-          <!--<icon name="retweet" scale="1"></icon>-->
           <button style="visibility: hidden;" id="findLotsButton" @click="findLots"></button>
         </label>
       </div>
