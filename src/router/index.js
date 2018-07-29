@@ -14,8 +14,13 @@ export default new Router({
       component: About
     },
     {
-      path: '/lots/:address?/:state?',
+      path: '/lots/:address/:state?',
       name: 'lots',
+      component: Lots
+    },
+    {
+      path: '/lots',
+      name: 'emptyLots',
       component: Lots
     },
     {

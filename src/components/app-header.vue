@@ -76,7 +76,6 @@
   .navBtn {
     display: flex;
     text-decoration: none !important;
-
   }
 
   .BtnText {

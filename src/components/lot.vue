@@ -1,30 +1,25 @@
 <template>
-  <div class="lot">
-    <div>lot #{{id}}</div>
+  <div :class="'lot ' + state">
+    <div class="number">LOT {{id}}</div>
+    <div class="name">{{name}}</div>
+    <div class="description">{{desc}}</div>
     <div>
-        <div>name</div>
-        <div>{{name}}</div>
+      <div class="stateText">State</div>
+      <div class="state">{{state}}</div>
+      <div v-if="owned">
+        <button class="button" v-if="state === 'open'" @click="close">close</button>
+        <button class="button" v-if="state === 'wait'" @click="setWinner">setWinner</button>
+      </div>
+      <div v-if="winner !== null">
+        <div class="winnerText">winner</div>
+        <div>{{winner}}</div>
+      </div>
     </div>
+
     <div>
-        <div>desc</div>
-        <div>{{desc}}</div>
-    </div>
-    <div v-if="winner !== null">
-      <div>winner</div>
-      <div>{{winner}}</div>
-    </div>
-    <div>
-      <div>state</div>
-      <div>{{state}}</div>
-    </div>
-    <div v-if="owned">
-      <button v-if="state === 'open'" @click="close">close</button>
-      <button v-if="state === 'wait'" @click="setWinner">setWinner</button>
-    </div>
-    <div>
-      <label>Stake</label>
-      <input v-model="stake" v-bind:disabled="stakeDisabled"/>
-      <button @click="placeStake" v-bind:disabled="stakeDisabled">confirm</button>
+      <label class="stakeText">Stake</label>
+      <input class="stakeInput" v-model="stake" v-bind:disabled="stakeDisabled"/>
+      <button class="button" @click="placeStake" v-bind:disabled="stakeDisabled">confirm</button>
     </div>
   </div>
 </template>
@@ -254,10 +249,51 @@ export default {
   }
 
   .lot {
-    width: 150px;
+    width: 225px;
+    height: 200px;
     padding: 10px;
     margin: 10px;
+    border-radius: 5px;
+    border: 1px solid;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .lot.open {
+    border-color: rgb(253, 204, 0);
+  }
+
+  .number, .stateText, .stakeText, .winnerText {
+    color: rgb(253, 204, 0);
+    font-weight: bold;
+  }
+
+  .name {
+    font-weight: bold;
+  }
+
+  .description, .name, .state {
+    color: white;
+  }
+
+  .button {
+    background-color: rgb(253, 204, 0);
     border-radius: 10px;
-    border: black 1px solid;
+    border-style: none;
+    width: 3.5rem;
+  }
+
+  .stakeInput {
+    border-radius: 10px;
+    border-style: none;
+    box-sizing: padding-box;
+    padding-left: 5px;
+    width: 5rem;
+    outline: none;
+  }
+
+  .button, .stakeInput {
+    height: 1.5rem;
   }
 </style>
